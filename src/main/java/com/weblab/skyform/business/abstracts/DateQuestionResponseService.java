@@ -12,9 +12,9 @@ public interface DateQuestionResponseService {
 
     Result addDateQuestionResponse(DateQuestionResponseDto dateQuestionResponseDto);
 
-    DataResult<List<OptionQuestionResponse>> getAllDateQuestionResponses();
+    DataResult<List<DateQuestionResponse>> getAllDateQuestionResponses();
 
-    DataResult<OptionQuestionResponse> getDateQuestionResponseById(int id);
+    DataResult<DateQuestionResponse> getDateQuestionResponseById(int id);
 
 }
 

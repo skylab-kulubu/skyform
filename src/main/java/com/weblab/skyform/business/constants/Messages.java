@@ -21,10 +21,22 @@ public class Messages {
     public static String getQuestionByIdSuccess;
     public static String questionAddSuccess;
     public static String addQuestionTypeSuccess;
-    public static String getQuestionTypesSuccess
-            ;
+    public static String getQuestionTypesSuccess;
     public static String getQuestionTypeByIdSuccess;
     public static String dateQuestionResponseAddSuccess;
     public static String textQuestionResponseAddSuccess;
     public static String optionQuestionResponseAddSuccess;
+    public static String addTextQuestionSuccess;
+    public static String getAllTextQuestionResponsesSuccess;
+    public static String getTextQuestionResponseById;
+    public static String getAllDateQuestionResponsesSuccess;
+    public static String getAllDateQuestionResponses;
+    public static String getDateQuestionResponseById;
+    public static String addQuestionOptionSuccess;
+    public static String getQuestionOptionByIdSuccess;
+    public static String getAllQuestionOptionsSuccess;
+    public static String getQuestionOptionsByQuestionId;
+    public static String addOptionQuestionSuccess;
+    public static String getAllOptionQuestionResponses;
+    public static String getOptionQuestionResponseById;
 }

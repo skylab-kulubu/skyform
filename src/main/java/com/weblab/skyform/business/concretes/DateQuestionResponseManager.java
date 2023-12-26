@@ -6,10 +6,12 @@ import com.weblab.skyform.business.abstracts.UserService;
 import com.weblab.skyform.business.constants.Messages;
 import com.weblab.skyform.core.utilities.result.DataResult;
 import com.weblab.skyform.core.utilities.result.Result;
+import com.weblab.skyform.core.utilities.result.SuccessDataResult;
 import com.weblab.skyform.core.utilities.result.SuccessResult;
 import com.weblab.skyform.dataAccess.abstracts.DateQuestionResponseDao;
 import com.weblab.skyform.entities.DateQuestionResponse;
 import com.weblab.skyform.entities.OptionQuestionResponse;
+import com.weblab.skyform.entities.TextQuestionResponse;
 import com.weblab.skyform.entities.dtos.DateQuestionResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,12 +48,16 @@ public class DateQuestionResponseManager implements DateQuestionResponseService 
     }
 
     @Override
-    public DataResult<List<OptionQuestionResponse>> getAllDateQuestionResponses() {
-        return null;
+    public DataResult<List<DateQuestionResponse>> getAllDateQuestionResponses() {
+        var result = dateQuestionResponseDao.findAll();
+
+        return new SuccessDataResult<List<DateQuestionResponse>>(result, Messages.getAllDateQuestionResponses);
     }
 
     @Override
-    public DataResult<OptionQuestionResponse> getDateQuestionResponseById(int id) {
-        return null;
+    public DataResult<DateQuestionResponse> getDateQuestionResponseById(int id) {
+        var result = dateQuestionResponseDao.findById(id);
+
+        return new SuccessDataResult<DateQuestionResponse>(result, Messages.getDateQuestionResponseById);
     }
 }

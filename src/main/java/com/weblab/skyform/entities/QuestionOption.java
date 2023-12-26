@@ -1,7 +1,9 @@
 package com.weblab.skyform.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +13,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "question_options")
 public class QuestionOption {
 
@@ -19,7 +22,7 @@ public class QuestionOption {
     @Column(name = "id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "question_id")
     private Question question;
 
@@ -31,6 +34,7 @@ public class QuestionOption {
 
 
     @OneToMany(mappedBy = "chosenOption", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<OptionQuestionResponse> optionQuestionResponses;
 
 
