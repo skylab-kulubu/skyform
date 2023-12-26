@@ -24,4 +24,7 @@ public class Messages {
     public static String getQuestionTypesSuccess
             ;
     public static String getQuestionTypeByIdSuccess;
+    public static String dateQuestionResponseAddSuccess;
+    public static String textQuestionResponseAddSuccess;
+    public static String optionQuestionResponseAddSuccess;
 }

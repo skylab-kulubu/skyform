@@ -4,6 +4,7 @@ import com.weblab.skyform.business.abstracts.FormService;
 import com.weblab.skyform.core.utilities.result.DataResult;
 import com.weblab.skyform.core.utilities.result.Result;
 import com.weblab.skyform.entities.Form;
+import com.weblab.skyform.entities.dtos.FormDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +22,8 @@ public class FormsController {
     }
 
     @PostMapping("/addform")
-    public Result addForm(@RequestBody Form form){
-        return formService.addForm(form);
+    public Result addForm(@RequestBody FormDto formDto){
+        return formService.addForm(formDto);
     }
 
     @GetMapping("/getforms")
@@ -36,7 +37,7 @@ public class FormsController {
     }
 
     @DeleteMapping("/deleteform")
-    public Result deleteForm(int formId){
+    public Result deleteForm(@RequestParam int formId){
         return formService.deleteForm(formId);
     }
 

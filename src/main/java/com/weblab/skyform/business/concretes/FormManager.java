@@ -7,6 +7,7 @@ import com.weblab.skyform.business.constants.Messages;
 import com.weblab.skyform.core.utilities.result.*;
 import com.weblab.skyform.dataAccess.abstracts.FormDao;
 import com.weblab.skyform.entities.Form;
+import com.weblab.skyform.entities.dtos.FormDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,15 @@ public class FormManager implements FormService {
     }
 
     @Override
-    public Result addForm(Form form) {
+    public Result addForm(FormDto formDto) {
+        Form form = Form.builder().formCreator(userService.getUserByUserId(formDto.getFormCreatorId()).getData()).
+                event(eventService.getEventByEventId(formDto.getEventId()).getData()).
+                name(formDto.getName()).
+                description(formDto.getDescription()).
+                creationDate(formDto.getCreationDate()).
+                startDate(formDto.getStartDate()).
+                endDate(formDto.getEndDate()).build();
+
         formDao.save(form);
         return new SuccessResult(Messages.formAddSuccess);
     }

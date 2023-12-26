@@ -4,6 +4,7 @@ import com.weblab.skyform.business.abstracts.QuestionService;
 import com.weblab.skyform.core.utilities.result.DataResult;
 import com.weblab.skyform.core.utilities.result.Result;
 import com.weblab.skyform.entities.Question;
+import com.weblab.skyform.entities.dtos.QuestionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,24 +21,24 @@ public class QuestionsController {
         this.questionService = questionService;
     }
 
-    @GetMapping("getquestions")
+    @GetMapping("/getquestions")
     public DataResult<List<Question>> getQuestions(){
         return questionService.getQuestions();
     };
 
-    @GetMapping("getquestionsbyformid")
+    @GetMapping("/getquestionsbyformid")
     public DataResult<List<Question>> getQuestionsByFormId(@RequestParam int formId){
         return questionService.getQuestionsByFormId(formId);
     }
 
-    @GetMapping("getquestionbyid")
+    @GetMapping("/getquestionbyid")
     public DataResult<Question> getQuestionById(@RequestParam int id){
         return questionService.getQuestionById(id);
     }
 
-    @PostMapping("addquestion")
-    public Result addQuestion(@RequestBody Question question){
-        return questionService.addQuestion(question);
+    @PostMapping("/addquestion")
+    public Result addQuestion(@RequestBody QuestionDto questionDto){
+        return questionService.addQuestion(questionDto);
     }
 
 }

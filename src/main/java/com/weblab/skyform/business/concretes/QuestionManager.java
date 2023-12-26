@@ -10,6 +10,7 @@ import com.weblab.skyform.core.utilities.result.SuccessDataResult;
 import com.weblab.skyform.core.utilities.result.SuccessResult;
 import com.weblab.skyform.dataAccess.abstracts.QuestionDao;
 import com.weblab.skyform.entities.Question;
+import com.weblab.skyform.entities.dtos.QuestionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +50,14 @@ public class QuestionManager implements QuestionService {
     }
 
     @Override
-    public Result addQuestion(Question question) {
+    public Result addQuestion(QuestionDto questionDto) {
+        Question question = Question.builder().
+                form(formService.getFormById(questionDto.getFormId()).getData())
+                .questionText(questionDto.getQuestionText())
+                .questionType(questionTypeService.getQuestionTypeById(questionDto.getQuestionTypeId()).getData())
+                .questionOrder(questionDto.getQuestionOrder())
+                .build();
+
         questionDao.save(question);
         return new SuccessResult(Messages.questionAddSuccess);
     }
