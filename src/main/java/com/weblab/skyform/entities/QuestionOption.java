@@ -11,19 +11,20 @@ import java.util.List;
 
 @Data
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "question_options")
 public class QuestionOption {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "question_id")
+
+    @ManyToOne
+    @JoinColumn(name = "question_id", referencedColumnName = "id")
+    @JsonIgnore
     private Question question;
 
     @Column(name = "option_order")
@@ -32,11 +33,9 @@ public class QuestionOption {
     @Column(name = "option_text")
     private String optionText;
 
-
-    @OneToMany(mappedBy = "chosenOption", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chosenOption")
     @JsonIgnore
-    private List<OptionQuestionResponse> optionQuestionResponses;
-
+    private List<ResponseOptionQuestion> responses;
 
 
 

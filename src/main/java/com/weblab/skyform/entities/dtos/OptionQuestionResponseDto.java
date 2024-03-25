@@ -1,14 +1,18 @@
 package com.weblab.skyform.entities.dtos;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
+@Builder
 public class OptionQuestionResponseDto {
-
-    private int responderId;
-
+    private int id;
     private int questionId;
-
-    private int chosenOptionId;
+    private int responderId;
+    private int selectedOptionId;
 
 }

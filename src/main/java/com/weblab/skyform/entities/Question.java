@@ -1,7 +1,6 @@
 package com.weblab.skyform.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,47 +11,32 @@ import java.util.List;
 
 @Data
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "questions")
-public class Question {
+public class Question{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "form_id")
+    @ManyToOne
+    @JoinColumn(name = "form_id", referencedColumnName = "id")
     private Form form;
 
     @Column(name = "question_text")
     private String questionText;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "question_type_id")
+    @ManyToOne
+    @JoinColumn(name = "question_type_id", referencedColumnName = "id")
     private QuestionType questionType;
 
     @Column(name = "question_order")
     private int questionOrder;
 
-
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<QuestionOption> questionOptions;
-
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<TextQuestionResponse> textQuestionResponses;
-
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<DateQuestionResponse> dateQuestionResponses;
-
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<OptionQuestionResponse> optionQuestionResponses;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<QuestionOption> options;
 
 
 }

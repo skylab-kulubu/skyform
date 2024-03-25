@@ -20,16 +20,11 @@ public class Form {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name= "id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "form_creator_id")
-    private User formCreator;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "event_id")
-    private Event event;
+    private User user;
 
     @Column(name ="name")
     private String name;
@@ -46,9 +41,14 @@ public class Form {
     @Column(name ="end_date")
     private Date endDate;
 
-    @OneToMany(mappedBy = "form", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "event_id", referencedColumnName = "id")
+    private Event event;
+
+    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
     private List<Question> questions;
+
+
 
 
 }

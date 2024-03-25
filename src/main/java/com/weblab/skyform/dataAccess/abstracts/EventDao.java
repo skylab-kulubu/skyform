@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface EventDao extends JpaRepository<Event, Integer> {
 
-    Event findEventById(int id);
+    Event findById(int id);
+
 
 }
