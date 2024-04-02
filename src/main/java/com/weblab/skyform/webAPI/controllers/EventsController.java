@@ -20,12 +20,12 @@ public class EventsController {
         this.eventService = eventService;
     }
 
-    @PostMapping("/addevent")
+    @PostMapping("/addEvent")
     public Result addEvent(@RequestBody Event event){
         return eventService.addEvent(event);
     }
 
-    @GetMapping("/getevents")
+    @GetMapping("/getEvents")
     public DataResult<List<Event>> getEvents(){
         return eventService.getEvents();
     }

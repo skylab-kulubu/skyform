@@ -21,22 +21,22 @@ public class FormsController {
         this.formService = formService;
     }
 
-    @PostMapping("/addform")
+    @PostMapping("/addForm")
     public Result addForm(@RequestBody FormDto formDto){
         return formService.addForm(formDto);
     }
 
-    @GetMapping("/getforms")
+    @GetMapping("/getForms")
     public DataResult<List<Form>> getForms(){
         return formService.getForms();
     }
 
-    @GetMapping("/getform")
+    @GetMapping("/getForm")
     public DataResult<Form> getForm(@RequestParam int formId){
         return formService.getFormById(formId);
     }
 
-    @DeleteMapping("/deleteform")
+    @DeleteMapping("/deleteForm")
     public Result deleteForm(@RequestParam int formId){
         return formService.deleteForm(formId);
     }

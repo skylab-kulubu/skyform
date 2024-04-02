@@ -21,12 +21,12 @@ public class QuestionTypesController {
     }
 
 
-    @PostMapping("/addquestiontype")
+    @PostMapping("/addQuestionType")
     public Result addQuestionType(@RequestBody QuestionType questionType){
         return questionTypeService.addQuestionType(questionType);
     }
 
-    @GetMapping("/getquestiontypes")
+    @GetMapping("/getQuestionTypes")
     public DataResult<List<QuestionType>> getQuestionTypes(){
         return questionTypeService.getQuestionTypes();
     }

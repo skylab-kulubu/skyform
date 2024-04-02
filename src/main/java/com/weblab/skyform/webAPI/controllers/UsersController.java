@@ -20,12 +20,12 @@ public class UsersController {
         this.userService = userService;
     }
 
-    @PostMapping("/adduser")
+    @PostMapping("/addUser")
     public Result addUser(@RequestBody User user){
         return userService.addUser(user);
     }
 
-    @GetMapping("/getusers")
+    @GetMapping("/getUsers")
     public DataResult<List<User>> getUsers(){
         return userService.getUsers();
     }

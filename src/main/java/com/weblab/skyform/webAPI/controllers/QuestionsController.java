@@ -21,22 +21,22 @@ public class QuestionsController {
         this.questionService = questionService;
     }
 
-    @GetMapping("/getquestions")
+    @GetMapping("/getQuestions")
     public DataResult<List<Question>> getQuestions(){
         return questionService.getQuestions();
     };
 
-    @GetMapping("/getquestionsbyformid")
+    @GetMapping("/getQuestionsByFormId")
     public DataResult<List<Question>> getQuestionsByFormId(@RequestParam int formId){
         return questionService.getQuestionsByFormId(formId);
     }
 
-    @GetMapping("/getquestionbyid")
+    @GetMapping("/getQuestionById")
     public DataResult<Question> getQuestionById(@RequestParam int id){
         return questionService.getQuestionById(id);
     }
 
-    @PostMapping("/addquestion")
+    @PostMapping("/addQuestion")
     public Result addQuestion(@RequestBody QuestionDto questionDto){
         return questionService.addQuestion(questionDto);
     }

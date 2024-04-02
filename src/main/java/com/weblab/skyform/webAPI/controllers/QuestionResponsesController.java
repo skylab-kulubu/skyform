@@ -38,36 +38,36 @@ public class QuestionResponsesController {
         this.optionQuestionResponseService = optionQuestionResponseService;
     }
 
-    @PostMapping("/adddatequestionresponse")
+    @PostMapping("/addDateQuestionResponse")
     public Result addDateQuestionResponse(@RequestBody DateQuestionResponseDto dateQuestionResponseDto){
         return dateQuestionResponseService.addDateQuestionResponse(dateQuestionResponseDto);
     }
 
-    @PostMapping("/addtextquestionresponse")
+    @PostMapping("/addTextQuestionResponse")
     public Result addTextQuestionResponse(@RequestBody TextQuestionResponseDto textQuestionResponseDto){
         textQuestionResponseService.addTextQuestion(textQuestionResponseDto);
 
         return new SuccessResult(Messages.textQuestionResponseAddSuccess);
     }
 
-    @PostMapping("/addoptionquestionresponse")
+    @PostMapping("/addOptionQuestionResponse")
     public Result addOptionQuestionResponse(@RequestBody OptionQuestionResponseDto optionQuestionResponseDto){
         optionQuestionResponseService.addOptionQuestion(optionQuestionResponseDto);
 
         return new SuccessResult(Messages.optionQuestionResponseAddSuccess);
     }
 
-    @GetMapping("/gettextquestionresponses")
+    @GetMapping("/getTextQuestionResponses")
     public DataResult<List<TextQuestionResponse>> getTextQuestionResponses(){
         return textQuestionResponseService.getAllTextQuestionResponses();
     }
 
-    @GetMapping("/getdatequestionresponses")
+    @GetMapping("/getDateQuestionResponses")
     public DataResult<List<DateQuestionResponse>> getDateQuestionResponses(){
         return dateQuestionResponseService.getAllDateQuestionResponses();
     }
 
-    @GetMapping("/getoptionquestionresponses")
+    @GetMapping("/getOptionQuestionResponses")
     public DataResult<List<OptionQuestionResponse>> getOptionQuestionResponses(){
         return optionQuestionResponseService.getAllOptionQuestionResponses();
     }

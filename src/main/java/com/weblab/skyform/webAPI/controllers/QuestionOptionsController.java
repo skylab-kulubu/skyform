@@ -23,22 +23,22 @@ public class QuestionOptionsController {
         this.questionOptionService = questionOptionService;
     }
 
-    @PostMapping("/addquestionoption")
+    @PostMapping("/addQuestionOption")
     public Result addQuestionOption(@RequestBody QuestionOptionDto questionOptionDto){
         return questionOptionService.addQuestionOption(questionOptionDto);
     }
 
-    @GetMapping("/getquestionoptionbyid")
+    @GetMapping("/getQuestionOptionById")
     public DataResult<QuestionOption> getQuestionOptionById(@RequestParam int id){
         return questionOptionService.getQuestionOptionById(id);
     }
 
-    @GetMapping("/getallquestionoptions")
+    @GetMapping("/getAllQuestionOptions")
     public DataResult<List<QuestionOption>> getAllQuestionOptions() {
         return questionOptionService.getAllQuestionOptions();
     }
 
-    @GetMapping("/getquestionoptionsbyquestionid")
+    @GetMapping("/getQuestionOptionsByQuestionId")
     public DataResult<List<QuestionOption>> getQuestionOptionsByQuestionId(@RequestParam int questionId) {
         return questionOptionService.getQuestionOptionsByQuestionId(questionId);
     }
