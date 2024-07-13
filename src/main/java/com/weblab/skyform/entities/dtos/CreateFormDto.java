@@ -11,9 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @Data
-public class FormDto {
-
-    private int formCreatorId;
+public class CreateFormDto {
 
     private String name;
 

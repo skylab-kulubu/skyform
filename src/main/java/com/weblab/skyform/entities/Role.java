@@ -1,8 +1,11 @@
 package com.weblab.skyform.entities;
 
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
     ROLE_USER("USER"),
+
     ROLE_ADMIN("ADMIN");
 
     private String value;
@@ -14,5 +17,11 @@ public enum Role {
     public String getValue(){
         return value;
     }
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
+
 
 }

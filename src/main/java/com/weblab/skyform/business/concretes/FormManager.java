@@ -8,8 +8,10 @@ import com.weblab.skyform.core.utilities.results.Result;
 import com.weblab.skyform.core.utilities.results.SuccessResult;
 import com.weblab.skyform.dataAccess.abstracts.FormDao;
 import com.weblab.skyform.entities.Form;
-import com.weblab.skyform.entities.dtos.FormDto;
+import com.weblab.skyform.entities.dtos.CreateFormDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,25 +23,23 @@ public class FormManager implements FormService {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private EventService eventService;
-
     @Override
-    public Result add(FormDto formDto) {
+    public Result addForm(CreateFormDto createFormDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
 
-        var formToAdd = Form.builder()
-                .user(userService.getById(formDto.getFormCreatorId()).getData())
-                .name(formDto.getName())
-                .description(formDto.getDescription())
-                .creationDate(formDto.getCreationDate())
-                .startDate(formDto.getStartDate())
-                .endDate(formDto.getEndDate())
-                .event(eventService.getById(formDto.getEventId()).getData())
+        Form form = Form.builder()
+                .name(createFormDto.getName())
+                .description(createFormDto.getDescription())
+                .creationDate(createFormDto.getCreationDate())
+                .startDate(createFormDto.getStartDate())
+                .endDate(createFormDto.getEndDate())
+                //.event(eventService.getById(createFormDto.getEventId()).getData())
+                .user(userService.getUserById(Integer.parseInt(userId)).getData())
                 .build();
 
-        formDao.save(formToAdd);
 
-        return new SuccessResult(FormMessages.formAddedSuccessfully);
+
 
     }
 }
