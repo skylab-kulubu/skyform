@@ -1,14 +1,12 @@
 package com.weblab.skyform.entities;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
-@Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "responses")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Response {
 
     @Id
@@ -19,7 +17,6 @@ public class Response {
     @ManyToOne
     @JoinColumn(name = "responder_id", referencedColumnName = "id")
     private User responder;
-
 
 
     @ManyToOne

@@ -1,28 +1,21 @@
 package com.weblab.skyform.entities;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public enum QuestionType {
 
-import java.util.List;
+    TYPE_TEXT("TEXT"),
+    TYPE_DATE("DATE"),
+    TYPE_RATING("RATING");
 
-@Data
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Table(name = "question_types")
-public class QuestionType {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private String value;
 
-    @Column(name = "name")
-    private String name;
+    QuestionType(String value) {
+        this.value = value;
+    }
 
-    @OneToMany(mappedBy = "questionType", cascade = CascadeType.ALL)
-    private List<Question> questions;
+    public String getValue(){
+        return value;
+    }
+
+
 }

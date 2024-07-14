@@ -19,8 +19,6 @@ public class CreateFormDto {
 
     private String description;
 
-    private Date creationDate;
-
     private Date startDate;
 
     private Date endDate;

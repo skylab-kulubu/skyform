@@ -14,29 +14,31 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name = "questions")
-public class Question{
+public class Question {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "creator_id")
+    private User creator;
 
     @ManyToOne
     @JoinColumn(name = "form_id", referencedColumnName = "id")
+    @JsonIgnore
     private Form form;
 
     @Column(name = "question_text")
     private String questionText;
 
-    @ManyToOne
-    @JoinColumn(name = "question_type_id", referencedColumnName = "id")
+    @Column(name = "question_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private QuestionType questionType;
 
     @Column(name = "question_order")
     private int questionOrder;
-
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<QuestionOption> options;
-
 
 }

@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -45,13 +46,22 @@ public class FormManager implements FormService {
 
         var user = userResult.getData();
 
+        var eventResult = eventService.getEventById(createFormDto.getEventId());
+
+        if(!eventResult.isSuccess()) {
+            return eventResult;
+        }
+
+        var event = eventResult.getData();
+
         var formToSave = Form.builder()
                 .name(createFormDto.getName())
                 .description(createFormDto.getDescription())
-                .creationDate(createFormDto.getCreationDate())
+                .creationDate(new Date())
                 .startDate(createFormDto.getStartDate())
                 .endDate(createFormDto.getEndDate())
                 .creator(user)
+                .event(event)
                 .build();
 
         formDao.save(formToSave);
@@ -79,12 +89,7 @@ public class FormManager implements FormService {
             return new ErrorDataResult<>(FormMessages.formsNotFound);
         }
 
-        List<GetFormDto> returnList = new ArrayList<>();
-
-        formList.forEach(form -> {
-            var returnForm = new GetFormDto().buildGetFormDto(form);
-            returnList.add(returnForm);
-        });
+        List<GetFormDto> returnList = new GetFormDto().buildListGetFormDto(formList);
 
         return new SuccessDataResult<>(returnList, FormMessages.formsSuccessfullyBrought);
 

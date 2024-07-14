@@ -54,19 +54,8 @@ public class UserManager implements UserService {
             return new ErrorResult(UserMessages.passwordCannotBeNull);
         }
 
-        var userToSave = new User().builder()
-                .firstName(createUserDto.getFirstName())
-                .lastName(createUserDto.getLastName())
-                .password(passwordEncoder.encode(createUserDto.getPassword()))
-                .email(createUserDto.getEmail())
-                .authorities(Set.of(Role.ROLE_USER))
-                .schoolNumber(createUserDto.getSchoolNumber())
-                .phoneNumber(createUserDto.getPhoneNumber())
-                .accountNonExpired(true)
-                .accountNonLocked(true)
-                .isEnabled(true)
-                .credentialsNonExpired(true)
-                .build();
+        var userToSave = createUserDto.buildUserWithoutPassword(createUserDto);
+        userToSave.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
 
         userDao.save(userToSave);
 
@@ -93,12 +82,7 @@ public class UserManager implements UserService {
             return new ErrorDataResult<>(UserMessages.usersNotFound);
         }
 
-        List<GetUserDto> returnList = new ArrayList<>();
-
-        userList.forEach(user -> {
-            var returnUser = new User().buildGetUserDto(user);
-            returnList.add(returnUser);
-        });
+        List<GetUserDto> returnList = new GetUserDto().buildListGetUserDto(userList);
 
         return new SuccessDataResult<List<GetUserDto>>(returnList, UserMessages.getUsersSuccess);
     }
@@ -122,7 +106,7 @@ public class UserManager implements UserService {
          return new ErrorDataResult<>(UserMessages.userDoesntExist);
      }
 
-        var returnUser = new User().buildGetUserDto(user);
+        var returnUser = new GetUserDto().buildGetUserDto(user);
 
         return new SuccessDataResult<GetUserDto>(returnUser, UserMessages.getByIdSuccess);
     }
@@ -147,7 +131,7 @@ public class UserManager implements UserService {
             return new ErrorDataResult<>(UserMessages.userDoesntExist);
         }
 
-        var returnUser = new User().buildGetUserDto(user);
+        var returnUser = new GetUserDto().buildGetUserDto(user);
 
         return new SuccessDataResult<GetUserDto>(returnUser, UserMessages.getByEmailSuccess);
     }

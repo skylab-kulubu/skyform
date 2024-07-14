@@ -77,17 +77,7 @@ public class User implements UserDetails {
         authorities.add(role);
     }
 
-    public GetUserDto buildGetUserDto(User user){
-        return GetUserDto.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .schoolNumber(user.getSchoolNumber())
-                .phoneNumber(user.getPhoneNumber())
-                .authorities(user.getAuthorities())
-                .build();
-    }
+
 
 
 }

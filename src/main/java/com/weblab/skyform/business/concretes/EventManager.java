@@ -3,16 +3,18 @@ package com.weblab.skyform.business.concretes;
 import com.weblab.skyform.business.abstracts.EventService;
 import com.weblab.skyform.business.abstracts.UserService;
 import com.weblab.skyform.business.constants.EventMessages;
-import com.weblab.skyform.core.utilities.results.DataResult;
-import com.weblab.skyform.core.utilities.results.ErrorDataResult;
-import com.weblab.skyform.core.utilities.results.Result;
-import com.weblab.skyform.core.utilities.results.SuccessDataResult;
+import com.weblab.skyform.core.utilities.results.*;
 import com.weblab.skyform.dataAccess.abstracts.EventDao;
 import com.weblab.skyform.entities.Event;
+import com.weblab.skyform.entities.dtos.event.CreateEventDto;
+import com.weblab.skyform.entities.dtos.event.GetEventDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class EventManager implements EventService {
@@ -23,22 +25,81 @@ public class EventManager implements EventService {
     @Autowired
     private UserService userService;
 
+
     @Override
-    public DataResult<Event> getEventById(int id) {
-       var result = eventDao.findById(id);
+    public Result addEvent(CreateEventDto createEventDto) {
 
-       if (result == null)
-           return new ErrorDataResult<Event>(EventMessages.getByIdFail);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserMail = authentication.getName();
 
-       return new SuccessDataResult<Event>(result, EventMessages.getByIdSuccess);
+        var userResult = userService.getUserByEmail(currentUserMail);
+
+        if(!userResult.isSuccess()){
+            return userResult;
+        }
+
+        var user = userResult.getData();
+
+
+        var eventToSave = Event.builder()
+                .name(createEventDto.getName())
+                .description(createEventDto.getDescription())
+                .creator(user)
+                .creationDate(new Date())
+                .startDate(createEventDto.getStartDate())
+                .endDate(createEventDto.getEndDate())
+                .build();
+
+        eventDao.save(eventToSave);
+
+        return new SuccessResult(EventMessages.eventAddedSuccessfully);
     }
 
     @Override
-    public Result addEvent(Event event) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserId = authentication.getName();
+    public DataResult<Event> getEventById(int id) {
+        var event = eventDao.findById(id);
 
-    return null;
+        if(event == null){
+            return new ErrorDataResult<>(EventMessages.eventNotFound);
+        }
 
+        return new SuccessDataResult<>(event, EventMessages.eventSuccessfullyBrought);
+    }
+
+    @Override
+    public DataResult<GetEventDto> getEventDtoById(int id) {
+        var event = eventDao.findById(id);
+
+        if(event == null){
+            return new ErrorDataResult<>(EventMessages.eventNotFound);
+        }
+
+        var returnEvent = new GetEventDto().buildGetEventDto(event);
+
+        return new SuccessDataResult<>(returnEvent, EventMessages.eventSuccessfullyBrought);
+    }
+
+    @Override
+    public DataResult<List<Event>> getAllEvents(int id) {
+        var result = eventDao.findAll();
+
+        if(result.isEmpty()) {
+            return new ErrorDataResult<>(EventMessages.eventsNotFound);
+        }
+
+        return new SuccessDataResult<>(result, EventMessages.eventsSuccessfullyBrought);
+    }
+
+    @Override
+    public DataResult<List<GetEventDto>> getAllEventsDto() {
+        var eventList = eventDao.findAll();
+
+        if(eventList.isEmpty()) {
+            return new ErrorDataResult<>(EventMessages.eventsNotFound);
+        }
+
+        List<GetEventDto> returnList = new GetEventDto().buildListGetEventDto(eventList);
+
+        return new SuccessDataResult<>(returnList, EventMessages.eventsSuccessfullyBrought);
     }
 }

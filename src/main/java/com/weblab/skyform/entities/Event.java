@@ -22,15 +22,15 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "creator_id")
-    private User creator;
-
     @Column(name = "name")
     private String name;
 
     @Column(name = "description")
     private String description;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "creator_id")
+    private User creator;
 
     @Column(name = "creation_date")
     private Date creationDate;
@@ -43,7 +43,5 @@ public class Event {
 
     @OneToMany(mappedBy = "event")
     private List<Form> forms;
-
-
 
 }
