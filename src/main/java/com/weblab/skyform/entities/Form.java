@@ -22,7 +22,7 @@ public class Form {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "creator_id")
     private User creator;
 
@@ -48,8 +48,5 @@ public class Form {
 
     @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
     private List<Question> questions;
-
-
-
 
 }

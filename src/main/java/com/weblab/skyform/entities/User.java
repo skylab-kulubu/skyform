@@ -2,6 +2,7 @@ package com.weblab.skyform.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.weblab.skyform.entities.dtos.user.GetUserDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -67,13 +68,25 @@ public class User implements UserDetails {
     private boolean credentialsNonExpired;
 
     @Override
-    //using id as username
+    //using email as username
     public String getUsername() {
-        return String.valueOf(id);
+        return email;
     }
 
     public void addRole(Role role){
         authorities.add(role);
+    }
+
+    public GetUserDto buildGetUserDto(User user){
+        return GetUserDto.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .schoolNumber(user.getSchoolNumber())
+                .phoneNumber(user.getPhoneNumber())
+                .authorities(user.getAuthorities())
+                .build();
     }
 
 

@@ -13,9 +13,9 @@ public interface UserService extends UserDetailsService {
 
     Result addUser(CreateUserDto createUserDto);
 
-    DataResult<List<User>> getUsers();
+    DataResult<List<User>> getAllUsers();
 
-    DataResult<List<GetUserDto>> getUsersDto();
+    DataResult<List<GetUserDto>> getAllUsersDto();
 
     DataResult<User> getUserById(int id);
 

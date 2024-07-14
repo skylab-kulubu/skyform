@@ -17,8 +17,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class EventManager implements EventService {
 
+    @Autowired
     private EventDao eventDao;
 
+    @Autowired
     private UserService userService;
 
     @Override
@@ -36,7 +38,7 @@ public class EventManager implements EventService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserId = authentication.getName();
 
-
+    return null;
 
     }
 }

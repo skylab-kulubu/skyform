@@ -24,6 +24,7 @@ public class UserManager implements UserService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
@@ -61,6 +62,10 @@ public class UserManager implements UserService {
                 .authorities(Set.of(Role.ROLE_USER))
                 .schoolNumber(createUserDto.getSchoolNumber())
                 .phoneNumber(createUserDto.getPhoneNumber())
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .isEnabled(true)
+                .credentialsNonExpired(true)
                 .build();
 
         userDao.save(userToSave);
@@ -70,7 +75,7 @@ public class UserManager implements UserService {
     }
 
     @Override
-    public DataResult<List<User>> getUsers() {
+    public DataResult<List<User>> getAllUsers() {
         var userList = userDao.findAll();
 
         if(userList.isEmpty()){
@@ -81,7 +86,7 @@ public class UserManager implements UserService {
     }
 
     @Override
-    public DataResult<List<GetUserDto>> getUsersDto() {
+    public DataResult<List<GetUserDto>> getAllUsersDto() {
         var userList = userDao.findAll();
 
         if(userList.isEmpty()){
@@ -91,7 +96,7 @@ public class UserManager implements UserService {
         List<GetUserDto> returnList = new ArrayList<>();
 
         userList.forEach(user -> {
-            var returnUser = buildGetUserDto(user);
+            var returnUser = new User().buildGetUserDto(user);
             returnList.add(returnUser);
         });
 
@@ -111,13 +116,13 @@ public class UserManager implements UserService {
 
     @Override
     public DataResult<GetUserDto> getUserDtoById(int id) {
-        var result = userDao.findById(id);
+        var user = userDao.findById(id);
 
-     if(result == null){
+     if(user == null){
          return new ErrorDataResult<>(UserMessages.userDoesntExist);
      }
 
-        var returnUser = buildGetUserDto(result);
+        var returnUser = new User().buildGetUserDto(user);
 
         return new SuccessDataResult<GetUserDto>(returnUser, UserMessages.getByIdSuccess);
     }
@@ -136,13 +141,13 @@ public class UserManager implements UserService {
 
     @Override
     public DataResult<GetUserDto> getUserDtoByEmail(String email) {
-        var result = userDao.findByEmail(email);
+        var user = userDao.findByEmail(email);
 
-        if(result == null){
+        if(user == null){
             return new ErrorDataResult<>(UserMessages.userDoesntExist);
         }
 
-        var returnUser = buildGetUserDto(result);
+        var returnUser = new User().buildGetUserDto(user);
 
         return new SuccessDataResult<GetUserDto>(returnUser, UserMessages.getByEmailSuccess);
     }
@@ -169,23 +174,9 @@ public class UserManager implements UserService {
 
     }
 
-    //using id instead of username
+    //using email instead of username
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userDao.findById(Integer.parseInt(username));
-    }
-
-    private static GetUserDto buildGetUserDto(User user) {
-        var returnUser = new GetUserDto().builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .schoolNumber(user.getSchoolNumber())
-                .phoneNumber(user.getPhoneNumber())
-                .authorities(user.getAuthorities())
-                .build();
-
-        return returnUser;
+        return userDao.findByEmail(username);
     }
 }

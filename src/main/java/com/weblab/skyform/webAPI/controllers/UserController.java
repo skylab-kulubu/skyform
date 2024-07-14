@@ -8,6 +8,7 @@ import com.weblab.skyform.core.utilities.results.Result;
 import com.weblab.skyform.entities.User;
 import com.weblab.skyform.entities.dtos.user.CreateUserDto;
 import com.weblab.skyform.entities.dtos.user.GetUserDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
+    @Autowired
     UserService userService;
 
 
@@ -31,9 +33,9 @@ public class UserController {
         return ResponseEntity.badRequest().body(result);
     }
 
-    @GetMapping("/getUsers")
-    public ResponseEntity<DataResult<List<GetUserDto>>> getUsers() {
-        var result = userService.getUsersDto();
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<DataResult<List<GetUserDto>>> getAllUsers() {
+        var result = userService.getAllUsersDto();
 
         if(result.isSuccess()) {
             return ResponseEntity.ok(result);
