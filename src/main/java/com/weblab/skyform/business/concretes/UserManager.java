@@ -70,7 +70,18 @@ public class UserManager implements UserService {
     }
 
     @Override
-    public DataResult<List<GetUserDto>> getUsers() {
+    public DataResult<List<User>> getUsers() {
+        var userList = userDao.findAll();
+
+        if(userList.isEmpty()){
+            return new ErrorDataResult<>(UserMessages.usersNotFound);
+        }
+
+        return new SuccessDataResult<List<User>>(userList, UserMessages.getUsersSuccess);
+    }
+
+    @Override
+    public DataResult<List<GetUserDto>> getUsersDto() {
         var userList = userDao.findAll();
 
         if(userList.isEmpty()){
@@ -80,58 +91,58 @@ public class UserManager implements UserService {
         List<GetUserDto> returnList = new ArrayList<>();
 
         userList.forEach(user -> {
-            returnList.add(new GetUserDto().builder()
-                    .id(user.getId())
-                    .firstName(user.getFirstName())
-                    .lastName(user.getLastName())
-                    .email(user.getEmail())
-                    .schoolNumber(user.getSchoolNumber())
-                    .phoneNumber(user.getPhoneNumber())
-                    .authorities(user.getAuthorities())
-                    .build());
+            var returnUser = buildGetUserDto(user);
+            returnList.add(returnUser);
         });
 
         return new SuccessDataResult<List<GetUserDto>>(returnList, UserMessages.getUsersSuccess);
     }
 
     @Override
-    public DataResult<GetUserDto> getUserById(int id) {
+    public DataResult<User> getUserById(int id) {
+        var result = userDao.findById(id);
+
+        if(result == null){
+            return new ErrorDataResult<>(UserMessages.userDoesntExist);
+        }
+
+        return new SuccessDataResult<User>(result, UserMessages.getByIdSuccess);
+    }
+
+    @Override
+    public DataResult<GetUserDto> getUserDtoById(int id) {
         var result = userDao.findById(id);
 
      if(result == null){
          return new ErrorDataResult<>(UserMessages.userDoesntExist);
      }
 
-     var returnUser = new GetUserDto().builder()
-             .id(result.getId())
-             .firstName(result.getFirstName())
-             .lastName(result.getLastName())
-             .email(result.getEmail())
-             .schoolNumber(result.getSchoolNumber())
-             .phoneNumber(result.getPhoneNumber())
-             .authorities(result.getAuthorities())
-             .build();
+        var returnUser = buildGetUserDto(result);
 
         return new SuccessDataResult<GetUserDto>(returnUser, UserMessages.getByIdSuccess);
     }
 
     @Override
-    public DataResult<GetUserDto> getByEmail(String email) {
+    public DataResult<User> getUserByEmail(String email) {
         var result = userDao.findByEmail(email);
 
         if(result == null){
             return new ErrorDataResult<>(UserMessages.userDoesntExist);
         }
 
-        var returnUser = new GetUserDto().builder()
-                .id(result.getId())
-                .firstName(result.getFirstName())
-                .lastName(result.getLastName())
-                .email(result.getEmail())
-                .schoolNumber(result.getSchoolNumber())
-                .phoneNumber(result.getPhoneNumber())
-                .authorities(result.getAuthorities())
-                .build();
+        return new SuccessDataResult<User>(result, UserMessages.getByEmailSuccess);
+    }
+
+
+    @Override
+    public DataResult<GetUserDto> getUserDtoByEmail(String email) {
+        var result = userDao.findByEmail(email);
+
+        if(result == null){
+            return new ErrorDataResult<>(UserMessages.userDoesntExist);
+        }
+
+        var returnUser = buildGetUserDto(result);
 
         return new SuccessDataResult<GetUserDto>(returnUser, UserMessages.getByEmailSuccess);
     }
@@ -162,5 +173,19 @@ public class UserManager implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userDao.findById(Integer.parseInt(username));
+    }
+
+    private static GetUserDto buildGetUserDto(User user) {
+        var returnUser = new GetUserDto().builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .schoolNumber(user.getSchoolNumber())
+                .phoneNumber(user.getPhoneNumber())
+                .authorities(user.getAuthorities())
+                .build();
+
+        return returnUser;
     }
 }

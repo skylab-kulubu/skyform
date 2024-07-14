@@ -8,8 +8,7 @@ import com.weblab.skyform.core.utilities.results.Result;
 import com.weblab.skyform.core.utilities.results.SuccessResult;
 import com.weblab.skyform.dataAccess.abstracts.FormDao;
 import com.weblab.skyform.entities.Form;
-import com.weblab.skyform.entities.dtos.CreateFormDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.weblab.skyform.entities.dtos.form.CreateFormDto;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -17,27 +16,39 @@ import org.springframework.stereotype.Service;
 @Service
 public class FormManager implements FormService {
 
-    @Autowired
     private FormDao formDao;
 
-    @Autowired
     private UserService userService;
+
+    private EventService eventService;
 
     @Override
     public Result addForm(CreateFormDto createFormDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
 
-        Form form = Form.builder()
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserId = authentication.getName();
+
+        var userResult = userService.getUserById(Integer.parseInt(currentUserId));
+
+        if(!userResult.isSuccess()){
+            return userResult;
+        }
+
+        var user = userResult.getData();
+
+        var formToSave = Form.builder()
                 .name(createFormDto.getName())
                 .description(createFormDto.getDescription())
                 .creationDate(createFormDto.getCreationDate())
                 .startDate(createFormDto.getStartDate())
                 .endDate(createFormDto.getEndDate())
-                //.event(eventService.getById(createFormDto.getEventId()).getData())
-                .user(userService.getUserById(Integer.parseInt(userId)).getData())
+                //.event(eventService.getById(createFormDto.getEventId()))
+                .creator(user)
                 .build();
 
+        formDao.save(formToSave);
+
+        return new SuccessResult(FormMessages.formAddedSuccessfully);
 
 
 

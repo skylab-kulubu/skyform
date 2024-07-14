@@ -6,7 +6,7 @@ import com.weblab.skyform.entities.Event;
 
 public interface EventService {
 
-    DataResult<Event> getById(int id);
+    DataResult<Event> getEventById(int id);
 
-    Result add(Event event);
+    Result addEvent(Event event);
 }

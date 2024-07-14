@@ -13,11 +13,19 @@ public interface UserService extends UserDetailsService {
 
     Result addUser(CreateUserDto createUserDto);
 
-    DataResult<List<GetUserDto>> getUsers();
+    DataResult<List<User>> getUsers();
 
-    DataResult<GetUserDto> getUserById(int id);
+    DataResult<List<GetUserDto>> getUsersDto();
 
-    DataResult<GetUserDto> getByEmail(String email);
+    DataResult<User> getUserById(int id);
+
+    DataResult<GetUserDto> getUserDtoById(int id);
+
+    DataResult<User> getUserByEmail(String email);
+
+    DataResult<GetUserDto> getUserDtoByEmail(String email);
 
     Result updateUser(User user);
+
+
 }

@@ -23,8 +23,8 @@ public class Form {
     private int id;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "form_creator_id")
-    private User user;
+    @JoinColumn(name = "creator_id")
+    private User creator;
 
     @Column(name ="name")
     private String name;
@@ -43,6 +43,7 @@ public class Form {
 
     @ManyToOne
     @JoinColumn(name = "event_id", referencedColumnName = "id")
+    @JsonIgnore
     private Event event;
 
     @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)

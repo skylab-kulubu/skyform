@@ -42,13 +42,17 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Form> forms;
 
     @OneToMany(mappedBy = "responder", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Response> responses;
+
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Event> events;
 
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)

@@ -1,4 +1,4 @@
-package com.weblab.skyform.entities.dtos;
+package com.weblab.skyform.entities.dtos.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +12,8 @@ import java.util.Date;
 @Builder
 @Data
 public class CreateFormDto {
+
+    //id
 
     private String name;
 
