@@ -6,7 +6,6 @@ import com.weblab.skyform.entities.Event;
 import com.weblab.skyform.entities.dtos.event.CreateEventDto;
 import com.weblab.skyform.entities.dtos.event.GetEventDto;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 
 public interface EventService {

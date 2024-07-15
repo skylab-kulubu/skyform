@@ -7,16 +7,13 @@ import com.weblab.skyform.business.constants.FormMessages;
 import com.weblab.skyform.core.utilities.results.*;
 import com.weblab.skyform.dataAccess.abstracts.FormDao;
 import com.weblab.skyform.entities.Form;
-import com.weblab.skyform.entities.User;
 import com.weblab.skyform.entities.dtos.form.CreateFormDto;
 import com.weblab.skyform.entities.dtos.form.GetFormDto;
-import com.weblab.skyform.entities.dtos.user.GetUserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -115,7 +112,7 @@ public class FormManager implements FormService {
             return new ErrorDataResult<>(FormMessages.formNotFound);
         }
 
-        var returnForm = new GetFormDto().buildGetFormDto(result);
+        var returnForm = new GetFormDto(result);
 
         return new SuccessDataResult<>(returnForm, FormMessages.formSuccessfullyBrought);
     }

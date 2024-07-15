@@ -74,7 +74,7 @@ public class EventManager implements EventService {
             return new ErrorDataResult<>(EventMessages.eventNotFound);
         }
 
-        var returnEvent = new GetEventDto().buildGetEventDto(event);
+        var returnEvent = new GetEventDto(event);
 
         return new SuccessDataResult<>(returnEvent, EventMessages.eventSuccessfullyBrought);
     }

@@ -4,7 +4,6 @@ import com.weblab.skyform.business.abstracts.UserService;
 import com.weblab.skyform.business.constants.UserMessages;
 import com.weblab.skyform.core.utilities.results.*;
 import com.weblab.skyform.dataAccess.abstracts.UserDao;
-import com.weblab.skyform.entities.Role;
 import com.weblab.skyform.entities.User;
 import com.weblab.skyform.entities.dtos.user.CreateUserDto;
 import com.weblab.skyform.entities.dtos.user.GetUserDto;
@@ -14,9 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserManager implements UserService {
@@ -106,7 +103,7 @@ public class UserManager implements UserService {
          return new ErrorDataResult<>(UserMessages.userDoesntExist);
      }
 
-        var returnUser = new GetUserDto().buildGetUserDto(user);
+        var returnUser = new GetUserDto(user);
 
         return new SuccessDataResult<GetUserDto>(returnUser, UserMessages.getByIdSuccess);
     }
@@ -131,7 +128,7 @@ public class UserManager implements UserService {
             return new ErrorDataResult<>(UserMessages.userDoesntExist);
         }
 
-        var returnUser = new GetUserDto().buildGetUserDto(user);
+        var returnUser = new GetUserDto(user);
 
         return new SuccessDataResult<GetUserDto>(returnUser, UserMessages.getByEmailSuccess);
     }

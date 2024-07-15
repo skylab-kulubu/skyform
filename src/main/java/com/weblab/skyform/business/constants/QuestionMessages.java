@@ -1,8 +1,5 @@
 package com.weblab.skyform.business.constants;
 
-import com.weblab.skyform.entities.Question;
-
-import java.util.List;
 
 public class QuestionMessages {
     public static String questionAdded = "Soru eklendi!";

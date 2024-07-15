@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class CreateQuestionDto {
 
     private int formId;
@@ -20,5 +19,7 @@ public class CreateQuestionDto {
     private int questionOrder;
 
     private int maxRating;
+
+    private boolean required;
 
 }

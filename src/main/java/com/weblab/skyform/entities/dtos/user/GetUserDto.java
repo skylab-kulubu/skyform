@@ -15,7 +15,6 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class GetUserDto {
 
     private int id;
@@ -32,22 +31,20 @@ public class GetUserDto {
 
     private Set<Role> authorities;
 
-    public GetUserDto buildGetUserDto(User user){
-        return GetUserDto.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .schoolNumber(user.getSchoolNumber())
-                .phoneNumber(user.getPhoneNumber())
-                .authorities(user.getAuthorities())
-                .build();
+    public GetUserDto(User user){
+        this.id = user.getId();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.schoolNumber = user.getSchoolNumber();
+        this.phoneNumber = user.getPhoneNumber();
+        this.authorities = user.getAuthorities();
     }
 
     public List<GetUserDto> buildListGetUserDto(List<User> users){
         List<GetUserDto> listGetUserDto = new ArrayList<>();
         for (User user : users) {
-            listGetUserDto.add(buildGetUserDto(user));
+            listGetUserDto.add(new GetUserDto(user));
         }
         return listGetUserDto;
     }

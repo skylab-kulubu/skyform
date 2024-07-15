@@ -2,15 +2,19 @@ package com.weblab.skyform.entities;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
 @Data
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Response {
+public abstract class Response {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
 
@@ -22,5 +26,9 @@ public class Response {
     @ManyToOne
     @JoinColumn(name = "question_id", referencedColumnName = "id")
     private Question question;
+
+    @Column(name = "response_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private QuestionType responseType;
 
 }

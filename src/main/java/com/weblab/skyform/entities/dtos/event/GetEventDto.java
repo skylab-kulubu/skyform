@@ -15,7 +15,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class GetEventDto {
 
     private int id;
@@ -34,23 +33,21 @@ public class GetEventDto {
 
     private List<GetFormDto> forms;
 
-    public GetEventDto buildGetEventDto(Event event){
-        return GetEventDto.builder()
-                .id(event.getId())
-                .name(event.getName())
-                .description(event.getDescription())
-                .eventCreator(new GetUserDto().buildGetUserDto(event.getCreator()))
-                .creationDate(event.getCreationDate())
-                .startDate(event.getStartDate())
-                .endDate(event.getEndDate())
-                .forms(new GetFormDto().buildListGetFormDto(event.getForms()))
-                .build();
+    public GetEventDto(Event event){
+        this.id = event.getId();
+        this.name = event.getName();
+        this.description = event.getDescription();
+        this.eventCreator = new GetUserDto(event.getCreator());
+        this.creationDate = event.getCreationDate();
+        this.startDate = event.getStartDate();
+        this.endDate = event.getEndDate();
+        this.forms = new GetFormDto().buildListGetFormDto(event.getForms());
     }
 
     public List<GetEventDto> buildListGetEventDto(List<Event> events){
         List<GetEventDto> listGetEventDto = new ArrayList<>();
         for (Event event : events) {
-            listGetEventDto.add(buildGetEventDto(event));
+            listGetEventDto.add(new GetEventDto(event));
         }
         return listGetEventDto;
     }

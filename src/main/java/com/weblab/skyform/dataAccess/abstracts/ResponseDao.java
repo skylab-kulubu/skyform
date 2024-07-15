@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ResponseDao extends JpaRepository<Response, Integer> {
+
+    Response findById(int id);
 }

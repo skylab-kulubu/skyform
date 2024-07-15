@@ -6,10 +6,10 @@ import com.weblab.skyform.business.abstracts.UserService;
 import com.weblab.skyform.business.constants.QuestionMessages;
 import com.weblab.skyform.core.utilities.results.*;
 import com.weblab.skyform.dataAccess.abstracts.QuestionDao;
-import com.weblab.skyform.entities.Question;
-import com.weblab.skyform.entities.QuestionRating;
-import com.weblab.skyform.entities.QuestionType;
+import com.weblab.skyform.entities.*;
 import com.weblab.skyform.entities.dtos.question.CreateQuestionDto;
+import com.weblab.skyform.entities.dtos.question.GetQuestionDto;
+import com.weblab.skyform.entities.dtos.question.GetQuestionRatingDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -63,23 +63,26 @@ public class QuestionManager implements QuestionService {
             question.setCreator(user);
             question.setQuestionOrder(createQuestionDto.getQuestionOrder());
             question.setForm(formResult.getData());
+            question.setRequired(createQuestionDto.isRequired());
 
         } else if (questionType.equals("TEXT")) {
-            question = new Question();
+            question = new QuestionText();
             question.setQuestionText(createQuestionDto.getQuestionText());
             question.setQuestionType(QuestionType.TYPE_TEXT);
             question.setCreator(user);
             question.setQuestionOrder(createQuestionDto.getQuestionOrder());
             question.setForm(formResult.getData());
+            question.setRequired(createQuestionDto.isRequired());
 
 
         } else if (questionType.equals("DATE")){
-        question = new Question();
+        question = new QuestionDate();
         question.setQuestionText(createQuestionDto.getQuestionText());
         question.setQuestionType(QuestionType.TYPE_DATE);
         question.setCreator(user);
         question.setQuestionOrder(createQuestionDto.getQuestionOrder());
         question.setForm(formResult.getData());
+        question.setRequired(createQuestionDto.isRequired());
 
         }
 
@@ -100,6 +103,27 @@ public class QuestionManager implements QuestionService {
     }
 
     @Override
+    public DataResult<GetQuestionDto> getQuestionDtoById(int id) {
+        var question = questionDao.findById(id);
+
+        if(question == null){
+            return new ErrorDataResult<>(QuestionMessages.questionNotFound);
+        }
+
+        GetQuestionDto returnQuestion = null;
+
+        if(question.getQuestionType().getValue().equals("RATING")){
+            returnQuestion = new GetQuestionRatingDto((QuestionRating) question);
+        }else if (question.getQuestionType().getValue().equals("DATE") || question.getQuestionType().getValue().equals("TEXT")){
+            returnQuestion = new GetQuestionDto(question);
+        }
+
+        return new SuccessDataResult<>(returnQuestion, QuestionMessages.questionSuccessfullyBrought);
+
+
+    }
+
+    @Override
     public DataResult<List<Question>> getAllQuestions() {
         var questions = questionDao.findAll();
 
@@ -108,5 +132,18 @@ public class QuestionManager implements QuestionService {
         }
 
         return new SuccessDataResult<>(questions, QuestionMessages.questionsSuccessfullyBrought);
+    }
+
+    @Override
+    public DataResult<List<GetQuestionDto>> getAllQuestionsDto() {
+        var questions = questionDao.findAll();
+
+        if(questions.isEmpty()){
+            return new ErrorDataResult<>(QuestionMessages.questionsNotFound);
+        }
+
+        List<GetQuestionDto> returnList = new GetQuestionDto().buildListGetQuestionDto(questions);
+
+        return new SuccessDataResult<>(returnList, QuestionMessages.questionsSuccessfullyBrought);
     }
 }

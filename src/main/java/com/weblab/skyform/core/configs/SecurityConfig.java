@@ -44,6 +44,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/forms/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/events/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/questions/**").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/api/responses/**").hasAnyRole("USER", "ADMIN")
                                 .anyRequest().permitAll()
 
                 )

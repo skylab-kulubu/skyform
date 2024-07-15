@@ -2,6 +2,7 @@ package com.weblab.skyform.entities.dtos.form;
 
 import com.weblab.skyform.entities.Form;
 import com.weblab.skyform.entities.Question;
+import com.weblab.skyform.entities.dtos.question.GetQuestionDto;
 import com.weblab.skyform.entities.dtos.user.GetUserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class GetFormDto {
 
     private int id;
@@ -32,25 +32,23 @@ public class GetFormDto {
 
     private Date endDate;
 
-    private List<Question> questions;
+    private List<GetQuestionDto> questions;
 
-    public GetFormDto buildGetFormDto(Form form){
-        return GetFormDto.builder()
-                .id(form.getId())
-                .formCreator(new GetUserDto().buildGetUserDto(form.getCreator()))
-                .name(form.getName())
-                .description(form.getDescription())
-                .creationDate(form.getCreationDate())
-                .startDate(form.getStartDate())
-                .endDate(form.getEndDate())
-                .questions(form.getQuestions())
-                .build();
+    public GetFormDto(Form form){
+        this.id = form.getId();
+        this.formCreator = new GetUserDto(form.getCreator());
+        this.name = form.getName();
+        this.description = form.getDescription();
+        this.creationDate = form.getCreationDate();
+        this.startDate = form.getStartDate();
+        this.endDate = form.getEndDate();
+        this.questions = new GetQuestionDto().buildListGetQuestionDto(form.getQuestions());
     }
 
     public List<GetFormDto> buildListGetFormDto(List<Form> forms){
         List<GetFormDto> listGetFormDto = new ArrayList<>();
         for (Form form : forms) {
-            listGetFormDto.add(buildGetFormDto(form));
+            listGetFormDto.add(new GetFormDto(form));
         }
         return listGetFormDto;
     }
