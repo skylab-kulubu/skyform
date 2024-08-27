@@ -20,4 +20,7 @@ public class UserMessages {
     public static String getByEmailSuccess = "User retrieved by email successfully";
     public static String usersNotFound = "Users not found";
     public static String userUpdateSuccess = "User updated successfully";
+    public static String userAlreadyExists = "User already exists";
+    public static String userAlreadyExistsByMail = "User already exists by mail";
+    public static String userAlreadyExistsBySchoolNumber = "User already exists by school number";
 }

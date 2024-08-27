@@ -59,22 +59,22 @@ public class EventManager implements EventService {
     public DataResult<Event> getEventById(int id) {
         var event = eventDao.findById(id);
 
-        if(event == null){
+        if(!event.isPresent()){
             return new ErrorDataResult<>(EventMessages.eventNotFound);
         }
 
-        return new SuccessDataResult<>(event, EventMessages.eventSuccessfullyBrought);
+        return new SuccessDataResult<>(event.get(), EventMessages.eventSuccessfullyBrought);
     }
 
     @Override
     public DataResult<GetEventDto> getEventDtoById(int id) {
         var event = eventDao.findById(id);
 
-        if(event == null){
+        if(!event.isPresent()){
             return new ErrorDataResult<>(EventMessages.eventNotFound);
         }
 
-        var returnEvent = new GetEventDto(event);
+        var returnEvent = new GetEventDto(event.get());
 
         return new SuccessDataResult<>(returnEvent, EventMessages.eventSuccessfullyBrought);
     }

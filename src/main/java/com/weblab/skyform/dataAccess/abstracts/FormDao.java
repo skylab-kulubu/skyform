@@ -7,7 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FormDao extends JpaRepository<Form,Integer> {
 
-    Form findById(int id);
-
 
 }

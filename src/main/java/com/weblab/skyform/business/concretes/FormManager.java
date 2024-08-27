@@ -96,23 +96,23 @@ public class FormManager implements FormService {
     public DataResult<Form> getFormById(int formId) {
         var result = formDao.findById(formId);
 
-        if(result == null) {
+        if(!result.isPresent()) {
             return new ErrorDataResult<>(FormMessages.formNotFound);
         }
 
 
-        return new SuccessDataResult<>(result, FormMessages.formSuccessfullyBrought);
+        return new SuccessDataResult<>(result.get(), FormMessages.formSuccessfullyBrought);
     }
 
     @Override
     public DataResult<GetFormDto> getFormDtoById(int formId) {
         var result = formDao.findById(formId);
 
-        if(result == null) {
+        if(!result.isPresent()) {
             return new ErrorDataResult<>(FormMessages.formNotFound);
         }
 
-        var returnForm = new GetFormDto(result);
+        var returnForm = new GetFormDto(result.get());
 
         return new SuccessDataResult<>(returnForm, FormMessages.formSuccessfullyBrought);
     }

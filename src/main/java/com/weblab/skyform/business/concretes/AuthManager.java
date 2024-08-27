@@ -65,6 +65,6 @@ public class AuthManager implements AuthService {
             return new SuccessDataResult<>(token, AuthMessages.tokenGeneratedSuccessfully);
         }
 
-        return new SuccessDataResult<>(AuthMessages.invalidUsernameOrPassword);
+        return new ErrorDataResult<>(AuthMessages.invalidUsernameOrPassword);
     }
 }

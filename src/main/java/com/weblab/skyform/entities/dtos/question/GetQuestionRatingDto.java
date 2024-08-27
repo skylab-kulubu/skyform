@@ -22,7 +22,8 @@ public class GetQuestionRatingDto extends GetQuestionDto{
                 questionRating.getQuestionText(),
                 questionRating.getQuestionType().getValue(),
                 questionRating.getQuestionOrder(),
-                questionRating.isRequired());
+                questionRating.isRequired(),
+                questionRating.getForm().getId());
         this.maxRating = questionRating.getMaxRating();
 
     }

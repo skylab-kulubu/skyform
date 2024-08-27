@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "9001:9001"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: skyformDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"

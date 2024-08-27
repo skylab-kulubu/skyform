@@ -39,6 +39,14 @@ public class UserManager implements UserService {
             return new ErrorResult(UserMessages.emailCannotBeNull);
         }
 
+       if (CheckIfUserExistsByMail(createUserDto.getEmail())){
+           return new ErrorResult(UserMessages.userAlreadyExistsByMail);
+       }
+
+        if (CheckIfUserExistsBySchoolNumber(createUserDto.getSchoolNumber())){
+            return new ErrorResult(UserMessages.userAlreadyExistsBySchoolNumber);
+        }
+
        if(createUserDto.getSchoolNumber() == null){
             return new ErrorResult(UserMessages.schoolNumberCannotBeNull);
         }
@@ -57,6 +65,28 @@ public class UserManager implements UserService {
         userDao.save(userToSave);
 
         return new SuccessResult(UserMessages.userAdded);
+
+    }
+
+    private boolean CheckIfUserExistsByMail(String email) {
+
+        var user = userDao.findByEmail(email);
+
+        if (user.isPresent()){
+            return true;
+        }
+        return false;
+
+    }
+
+    private boolean CheckIfUserExistsBySchoolNumber(String schoolNumber) {
+
+        var user = userDao.findBySchoolNumber(schoolNumber);
+
+        if (user.isPresent()){
+            return true;
+        }
+        return false;
 
     }
 
@@ -88,22 +118,22 @@ public class UserManager implements UserService {
     public DataResult<User> getUserById(int id) {
         var result = userDao.findById(id);
 
-        if(result == null){
+        if(!result.isPresent()){
             return new ErrorDataResult<>(UserMessages.userDoesntExist);
         }
 
-        return new SuccessDataResult<User>(result, UserMessages.getByIdSuccess);
+        return new SuccessDataResult<User>(result.get(), UserMessages.getByIdSuccess);
     }
 
     @Override
     public DataResult<GetUserDto> getUserDtoById(int id) {
         var user = userDao.findById(id);
 
-     if(user == null){
+     if(!user.isPresent()){
          return new ErrorDataResult<>(UserMessages.userDoesntExist);
      }
 
-        var returnUser = new GetUserDto(user);
+        var returnUser = new GetUserDto(user.get());
 
         return new SuccessDataResult<GetUserDto>(returnUser, UserMessages.getByIdSuccess);
     }
@@ -112,11 +142,11 @@ public class UserManager implements UserService {
     public DataResult<User> getUserByEmail(String email) {
         var result = userDao.findByEmail(email);
 
-        if(result == null){
+        if(!result.isPresent()){
             return new ErrorDataResult<>(UserMessages.userDoesntExist);
         }
 
-        return new SuccessDataResult<User>(result, UserMessages.getByEmailSuccess);
+        return new SuccessDataResult<User>(result.get(), UserMessages.getByEmailSuccess);
     }
 
 
@@ -124,22 +154,24 @@ public class UserManager implements UserService {
     public DataResult<GetUserDto> getUserDtoByEmail(String email) {
         var user = userDao.findByEmail(email);
 
-        if(user == null){
+        if(!user.isPresent()){
             return new ErrorDataResult<>(UserMessages.userDoesntExist);
         }
 
-        var returnUser = new GetUserDto(user);
+        var returnUser = new GetUserDto(user.get());
 
         return new SuccessDataResult<GetUserDto>(returnUser, UserMessages.getByEmailSuccess);
     }
 
     @Override
     public Result updateUser(User user) {
-        var userToUpdate = userDao.findById(user.getId());
+        var result = userDao.findById(user.getId());
 
-        if(userToUpdate == null){
+        if(!result.isPresent()){
             return new ErrorDataResult<>(UserMessages.userDoesntExist);
         }
+
+        var userToUpdate = result.get();
 
          userToUpdate.setFirstName(user.getFirstName().isEmpty() ? userToUpdate.getFirstName() : user.getFirstName());
          userToUpdate.setLastName(user.getLastName().isEmpty() ? userToUpdate.getLastName() : user.getLastName());
@@ -158,6 +190,6 @@ public class UserManager implements UserService {
     //using email instead of username
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userDao.findByEmail(username);
+        return userDao.findByEmail(username).get();
     }
 }

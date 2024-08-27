@@ -95,20 +95,22 @@ public class QuestionManager implements QuestionService {
     public DataResult<Question> getQuestionById(int id) {
         var question = questionDao.findById(id);
 
-        if(question == null){
+        if(!question.isPresent()){
             return new ErrorDataResult<>(QuestionMessages.questionNotFound);
         }
 
-        return new SuccessDataResult<>(question, QuestionMessages.questionSuccessfullyBrought);
+        return new SuccessDataResult<>(question.get(), QuestionMessages.questionSuccessfullyBrought);
     }
 
     @Override
     public DataResult<GetQuestionDto> getQuestionDtoById(int id) {
-        var question = questionDao.findById(id);
+        var result = questionDao.findById(id);
 
-        if(question == null){
+        if(!result.isPresent()){
             return new ErrorDataResult<>(QuestionMessages.questionNotFound);
         }
+
+        var question = result.get();
 
         GetQuestionDto returnQuestion = null;
 

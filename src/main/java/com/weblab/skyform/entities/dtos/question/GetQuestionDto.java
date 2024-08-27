@@ -30,6 +30,8 @@ public class GetQuestionDto {
 
     private boolean required;
 
+    private int formId;
+
     public GetQuestionDto(Question question){
        this.id = question.getId();
        //this.creator = new GetUserDto(question.getCreator());
@@ -37,6 +39,7 @@ public class GetQuestionDto {
        this.questionType = question.getQuestionType().getValue();
        this.questionOrder = question.getQuestionOrder();
        this.required = question.isRequired();
+       this.formId = question.getForm().getId();
     }
 
     public List<GetQuestionDto> buildListGetQuestionDto(List<Question> questions){

@@ -124,21 +124,23 @@ public class ResponseManager implements ResponseService {
     public DataResult<Response> getResponseById(int id) {
         var response = responseDao.findById(id);
 
-        if(response == null){
+        if(!response.isPresent()){
             return new ErrorDataResult<>(ResponseMessages.responseNotFound);
         }
 
-        return new SuccessDataResult<>(response, ResponseMessages.responseSuccessfullyBrought);
+        return new SuccessDataResult<>(response.get(), ResponseMessages.responseSuccessfullyBrought);
 
     }
 
     @Override
     public DataResult<GetResponseDto> getResponseDtoById(int id) {
-        var response = responseDao.findById(id);
+        var result = responseDao.findById(id);
 
-        if(response == null){
+        if(!result.isPresent()){
             return new ErrorDataResult<>(ResponseMessages.responseNotFound);
         }
+
+        var response = result.get();
 
         GetResponseDto returnResponse = null;
 
