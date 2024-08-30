@@ -1,9 +1,11 @@
 package com.weblab.skyform.webAPI.controllers;
 
 import com.weblab.skyform.business.abstracts.QuestionService;
+import com.weblab.skyform.core.utilities.results.DataResult;
 import com.weblab.skyform.core.utilities.results.Result;
 
 import com.weblab.skyform.entities.dtos.question.CreateQuestionDto;
+import com.weblab.skyform.entities.dtos.question.GetQuestionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +29,7 @@ public class QuestionController {
     }
 
     @GetMapping("/getQuestionById/{id}")
-    public ResponseEntity<Result> getQuestionById(@PathVariable int id) {
+    public ResponseEntity<DataResult<GetQuestionDto>> getQuestionById(@PathVariable int id) {
         var result = questionService.getQuestionDtoById(id);
 
         if(result.isSuccess()) {
@@ -47,6 +49,4 @@ public class QuestionController {
 
         return ResponseEntity.badRequest().body(result);
     }
-
-
 }
