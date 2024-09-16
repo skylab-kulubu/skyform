@@ -2,7 +2,6 @@ package com.weblab.skyform.core.configs;
 
 import com.weblab.skyform.business.abstracts.UserService;
 import com.weblab.skyform.core.security.JwtAuthFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,14 +22,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    @Autowired
-    private JwtAuthFilter jwtAuthFilter;
 
-    @Autowired
-    private UserService userService;
+    private final JwtAuthFilter jwtAuthFilter;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserService userService;
+
+    private final PasswordEncoder passwordEncoder;
+
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserService userService, PasswordEncoder passwordEncoder) {
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -44,7 +47,15 @@ public class SecurityConfig {
                                 .requestMatchers("/api/forms/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/events/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/questions/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/api/responses/**").hasAnyRole("USER", "ADMIN")
+
+                                //RESPONSES
+                                .requestMatchers("/api/responses/addResponse").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/api/responses/getResponses").permitAll()
+                                .requestMatchers("/api/responses/getAllResponses").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/api/responses/getResponsesByFormId/**").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/api/responses/getResponsesByResponseSession/**").hasAnyRole("USER", "ADMIN")
+
+
                                 .anyRequest().permitAll()
 
                 )

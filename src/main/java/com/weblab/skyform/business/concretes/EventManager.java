@@ -8,7 +8,6 @@ import com.weblab.skyform.dataAccess.abstracts.EventDao;
 import com.weblab.skyform.entities.Event;
 import com.weblab.skyform.entities.dtos.event.CreateEventDto;
 import com.weblab.skyform.entities.dtos.event.GetEventDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,12 +18,14 @@ import java.util.List;
 @Service
 public class EventManager implements EventService {
 
-    @Autowired
-    private EventDao eventDao;
+    private final EventDao eventDao;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
+    public EventManager(EventDao eventDao, UserService userService) {
+        this.eventDao = eventDao;
+        this.userService = userService;
+    }
 
     @Override
     public Result addEvent(CreateEventDto createEventDto) {

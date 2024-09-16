@@ -10,7 +10,7 @@ import lombok.Data;
 public class QuestionText extends Question{
 
     public QuestionText() {
-        setQuestionType(QuestionType.TYPE_DATE);
+        setQuestionType(QuestionType.TYPE_TEXT);
     }
 
     public QuestionText(String questionText) {

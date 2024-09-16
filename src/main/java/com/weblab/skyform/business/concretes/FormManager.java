@@ -6,12 +6,10 @@ import com.weblab.skyform.business.abstracts.UserService;
 import com.weblab.skyform.business.constants.FormMessages;
 import com.weblab.skyform.core.utilities.results.*;
 import com.weblab.skyform.dataAccess.abstracts.FormDao;
+import com.weblab.skyform.entities.Event;
 import com.weblab.skyform.entities.Form;
 import com.weblab.skyform.entities.dtos.form.CreateFormDto;
 import com.weblab.skyform.entities.dtos.form.GetFormDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -20,36 +18,43 @@ import java.util.List;
 @Service
 public class FormManager implements FormService {
 
-    @Autowired
-    private FormDao formDao;
+    private final FormDao formDao;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private EventService eventService;
+    private final EventService eventService;
+
+
+    public FormManager(EventService eventService, FormDao formDao, UserService userService) {
+        this.eventService = eventService;
+        this.formDao = formDao;
+        this.userService = userService;
+    }
 
     @Override
     public Result addForm(CreateFormDto createFormDto) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserMail = authentication.getName();
-
-        var userResult = userService.getUserByEmail(currentUserMail);
-
-        if(!userResult.isSuccess()){
+        var userResult = userService.getLoggedInUser();
+        if (!userResult.isSuccess()) {
             return userResult;
         }
-
         var user = userResult.getData();
 
-        var eventResult = eventService.getEventById(createFormDto.getEventId());
+        /*
+        DEPRECATED, WONT BE USING EVENT FEATURE BECAUSE OF SKYEVENT - WILL INTEGRATE EVENT FEATURE FROM SKYEVENT
+        Event event;
 
-        if(!eventResult.isSuccess()) {
-            return eventResult;
+        if (createFormDto.getEventId() > 0) {
+            var eventResult = eventService.getEventById(createFormDto.getEventId());
+
+            if(!eventResult.isSuccess()) {
+                return eventResult;
+            }
+            event = eventResult.getData();
+        }else {
+            event = null;
         }
-
-        var event = eventResult.getData();
+         */
+        Event event = null;
 
         var formToSave = Form.builder()
                 .name(createFormDto.getName())

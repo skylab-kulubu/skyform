@@ -8,7 +8,6 @@ import com.weblab.skyform.core.utilities.results.Result;
 import com.weblab.skyform.entities.User;
 import com.weblab.skyform.entities.dtos.user.CreateUserDto;
 import com.weblab.skyform.entities.dtos.user.GetUserDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +17,11 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
 
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/addUser")
     public ResponseEntity<Result> addUser(@RequestBody CreateUserDto createUserDto) {

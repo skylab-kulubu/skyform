@@ -18,9 +18,11 @@ public class GetResponseDateDto extends GetResponseDto{
 
     public GetResponseDateDto(ResponseDate responseDate){
         super(responseDate.getId(),
-                     new GetUserDto(responseDate.getResponder()),
+                        responseDate.getResponder() == null ? null : new GetUserDto(responseDate.getResponder()),
                      new GetQuestionDto(responseDate.getQuestion()),
-                     responseDate.getResponseType().getValue());
+                     responseDate.getResponseType().getValue(),
+                    responseDate.getResponseSession());
+        ;
              this.date = responseDate.getDate();
     }
 }

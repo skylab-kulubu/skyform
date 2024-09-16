@@ -5,13 +5,15 @@ import com.weblab.skyform.entities.Response;
 import java.util.List;
 
 public class ResponseMessages {
-    public static String responseTypeIsNotEqualToQuestionType = "Response type is not equal to question type";
-    public static String responseAdded = "Response added";
-    public static String responsesNotFound = "Responses not found";
-    public static String responsesSuccessfullyBrought = "Responses successfully brought";
-    public static String responseNotFound = "Response not found";
-    public static String responseSuccessfullyBrought = "Response successfully brought";
-    public static String responseTextIsRequired = "Response text is required";
-    public static String responseDateIsRequired = "Response date is required";
-    public static String responseRatingIsRequired = "Response rating is required";
+    public static String responseTypeIsNotEqualToQuestionType = "Soru tipi ile cevap tipi eşleşmiyor";
+    public static String responseAdded = "Cevap eklendi";
+    public static String responsesNotFound = "Cevaplar bulunamadı";
+    public static String responsesSuccessfullyBrought = "Cevaplar başarıyla getirildi";
+    public static String responseNotFound = "Cevap bulunamadı";
+    public static String responseSuccessfullyBrought = "Cevep başarıyla getirildi";
+    public static String responseTextIsRequired = "Cevap metni gereklidir";
+    public static String responseDateIsRequired = "Cevep tarihi gereklidir";
+    public static String responseRatingIsRequired = "Cevap puanı gereklidir";
+    public static String questionNotFound = "Soru bulunamadı";
+    public static String responsesAdded = "Cevaplar eklendi";
 }

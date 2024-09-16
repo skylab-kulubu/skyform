@@ -6,7 +6,6 @@ import com.weblab.skyform.core.utilities.results.Result;
 import com.weblab.skyform.entities.dtos.user.CreateUserDto;
 import com.weblab.skyform.entities.dtos.user.LoginUserDto;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,8 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<DataResult<String>> login(@RequestBody LoginUserDto loginUserDto, HttpServletResponse response) {

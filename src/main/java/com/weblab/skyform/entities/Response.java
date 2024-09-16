@@ -17,11 +17,12 @@ public abstract class Response {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-
     @ManyToOne
     @JoinColumn(name = "responder_id", referencedColumnName = "id")
     private User responder;
 
+    @Column(name = "response_session", nullable = false)
+    private String responseSession;
 
     @ManyToOne
     @JoinColumn(name = "question_id", referencedColumnName = "id")

@@ -18,9 +18,10 @@ public class GetResponseRatingDto extends GetResponseDto{
 
     public GetResponseRatingDto(ResponseRating responseRating){
        super(responseRating.getId(),
-                    new GetUserDto(responseRating.getResponder()),
+                responseRating.getResponder() == null ? null : new GetUserDto(responseRating.getResponder()),
                     new GetQuestionRatingDto((QuestionRating) responseRating.getQuestion()),
-               responseRating.getResponseType().getValue());
+               responseRating.getResponseType().getValue(),
+               responseRating.getResponseSession());
             this.rating = responseRating.getRating();
     }
 }

@@ -1,35 +1,37 @@
 package com.weblab.skyform.business.concretes;
 
+import com.weblab.skyform.business.abstracts.FormService;
 import com.weblab.skyform.business.abstracts.QuestionService;
 import com.weblab.skyform.business.abstracts.ResponseService;
 import com.weblab.skyform.business.abstracts.UserService;
 import com.weblab.skyform.business.constants.ResponseMessages;
 import com.weblab.skyform.core.utilities.results.*;
 import com.weblab.skyform.dataAccess.abstracts.ResponseDao;
-import com.weblab.skyform.entities.Response;
-import com.weblab.skyform.entities.ResponseDate;
-import com.weblab.skyform.entities.ResponseRating;
-import com.weblab.skyform.entities.ResponseText;
+import com.weblab.skyform.entities.*;
 import com.weblab.skyform.entities.dtos.response.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ResponseManager implements ResponseService {
 
-    @Autowired
-    private ResponseDao responseDao;
+    private final ResponseDao responseDao;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
+
+    public ResponseManager(QuestionService questionService, ResponseDao responseDao, UserService userService) {
+        this.questionService = questionService;
+        this.responseDao = responseDao;
+        this.userService = userService;
+    }
 
     @Override
     public Result addResponse(CreateResponseDto createResponseDto) {
@@ -97,6 +99,72 @@ public class ResponseManager implements ResponseService {
     }
 
     @Override
+    public Result addResponses(List<CreateResponseDto> createResponseDtos, int formId) {
+        var userResult = userService.getLoggedInUser();
+        User user;
+        if (userResult.isSuccess()) {
+            user = userResult.getData();
+        } else {
+            user = null;
+        }
+
+        var sessionId = UUID.randomUUID().toString();
+
+        List<Response> responseList = new ArrayList<>();
+
+        var questionList = questionService.getQuestionsByFormId(formId).getData();
+
+       for (var createResponseDto : createResponseDtos) {
+           var question = questionList.stream().filter(q -> q.getId() == createResponseDto.getQuestionId()).findFirst().orElse(null);
+
+           if (question == null) {
+               return new ErrorResult(ResponseMessages.questionNotFound);
+           }
+
+           if (!question.getQuestionType().getValue().equals(createResponseDto.getResponseType())) {
+               return new ErrorResult(ResponseMessages.responseTypeIsNotEqualToQuestionType);
+           }
+
+           var questionType = question.getQuestionType().getValue();
+
+           if (questionType.equals("TEXT") && createResponseDto.getTextResponse() == null && question.isRequired()) {
+               return new ErrorResult(ResponseMessages.responseTextIsRequired);
+           }
+
+           if (questionType.equals("DATE") && createResponseDto.getDateResponse() == null && question.isRequired()) {
+               return new ErrorResult(ResponseMessages.responseDateIsRequired);
+           }
+
+           if (questionType.equals("RATING") && createResponseDto.getRatingResponse() == 0 && question.isRequired()) {
+               return new ErrorResult(ResponseMessages.responseRatingIsRequired);
+           }
+
+           Response response = null;
+
+           if (questionType.equals("TEXT")) {
+               response = new ResponseText(createResponseDto.getTextResponse());
+           } else if (questionType.equals("DATE")) {
+               response = new ResponseDate(createResponseDto.getDateResponse());
+           } else if (questionType.equals("RATING")) {
+               response = new ResponseRating(createResponseDto.getRatingResponse());
+           }
+
+           response.setResponder(user);
+           response.setQuestion(question);
+           response.setResponseSession(sessionId);
+
+           responseList.add(response);
+       }
+
+        responseDao.saveAll(responseList);
+
+        return new SuccessResult(ResponseMessages.responsesAdded);
+
+    }
+
+
+
+    @Override
     public DataResult<List<Response>> getAllResponses() {
         var responses = responseDao.findAll();
 
@@ -153,5 +221,18 @@ public class ResponseManager implements ResponseService {
         }
 
         return new SuccessDataResult<>(returnResponse, ResponseMessages.responseSuccessfullyBrought);
+    }
+
+    @Override
+    public DataResult<List<GetResponseDto>> getResponsesByResponseSession(String responseSession) {
+        var responses = responseDao.findAllByResponseSession(responseSession);
+
+        if(responses.isEmpty()){
+            return new ErrorDataResult<>(ResponseMessages.responsesNotFound);
+        }
+
+        List<GetResponseDto> listGetResponseDto = new GetResponseDto().buildListGetResponseDto(responses.get());
+
+        return new SuccessDataResult<>(listGetResponseDto, ResponseMessages.responsesSuccessfullyBrought);
     }
 }

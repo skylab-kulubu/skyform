@@ -2,6 +2,7 @@ package com.weblab.skyform.entities.dtos.question;
 
 import com.weblab.skyform.entities.Question;
 import com.weblab.skyform.entities.QuestionRating;
+import com.weblab.skyform.entities.QuestionType;
 import com.weblab.skyform.entities.dtos.user.GetUserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,9 +46,9 @@ public class GetQuestionDto {
     public List<GetQuestionDto> buildListGetQuestionDto(List<Question> questions){
         List<GetQuestionDto> listGetQuestionDto = new ArrayList<>();
         for (Question question : questions) {
-            if(question.getQuestionType().getValue().equals("RATING")){
+            if(question.getQuestionType().getValue().equals(QuestionType.TYPE_RATING.getValue())){
                 listGetQuestionDto.add(new GetQuestionRatingDto((QuestionRating) question));
-            }else if (question.getQuestionType().getValue().equals("DATE") || question.getQuestionType().getValue().equals("TEXT")){
+            }else if (question.getQuestionType().getValue().equals(QuestionType.TYPE_DATE.getValue()) || question.getQuestionType().getValue().equals(QuestionType.TYPE_TEXT.getValue())){
                 listGetQuestionDto.add(new GetQuestionDto(question));
             }
 

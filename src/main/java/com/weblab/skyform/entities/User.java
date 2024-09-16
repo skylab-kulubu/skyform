@@ -60,12 +60,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> authorities;
 
-    private boolean accountNonExpired;
-    private boolean isEnabled;
-    private boolean accountNonLocked;
-    private boolean credentialsNonExpired;
-
     @Override
+
     //using email as username
     public String getUsername() {
         return email;

@@ -35,10 +35,6 @@ public class CreateUserDto {
                 .authorities(Set.of(Role.ROLE_USER))
                 .schoolNumber(createUserDto.getSchoolNumber())
                 .phoneNumber(createUserDto.getPhoneNumber())
-                .accountNonExpired(true)
-                .accountNonLocked(true)
-                .isEnabled(true)
-                .credentialsNonExpired(true)
                 .build();
     }
 

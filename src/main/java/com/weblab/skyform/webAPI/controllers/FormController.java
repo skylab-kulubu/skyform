@@ -3,7 +3,6 @@ package com.weblab.skyform.webAPI.controllers;
 import com.weblab.skyform.business.abstracts.FormService;
 import com.weblab.skyform.core.utilities.results.Result;
 import com.weblab.skyform.entities.dtos.form.CreateFormDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/forms")
 public class FormController {
 
-    @Autowired
-    private FormService formService;
+    private final FormService formService;
+
+    public FormController(FormService formService) {
+        this.formService = formService;
+    }
 
     @PostMapping("/addForm")
     public ResponseEntity<Result> addForm(@RequestBody CreateFormDto createFormDto) {

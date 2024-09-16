@@ -47,6 +47,7 @@ public class Form {
     private Event event;
 
     @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
+    @OrderBy("questionOrder ASC")
     private List<Question> questions;
 
 }

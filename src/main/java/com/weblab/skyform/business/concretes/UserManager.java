@@ -7,7 +7,8 @@ import com.weblab.skyform.dataAccess.abstracts.UserDao;
 import com.weblab.skyform.entities.User;
 import com.weblab.skyform.entities.dtos.user.CreateUserDto;
 import com.weblab.skyform.entities.dtos.user.GetUserDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,11 +19,14 @@ import java.util.List;
 @Service
 public class UserManager implements UserService {
 
-    @Autowired
-    private UserDao userDao;
+    private final UserDao userDao;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public UserManager(BCryptPasswordEncoder passwordEncoder, UserDao userDao) {
+        this.passwordEncoder = passwordEncoder;
+        this.userDao = userDao;
+    }
 
     @Override
     public Result addUser(CreateUserDto createUserDto) {
@@ -185,6 +189,18 @@ public class UserManager implements UserService {
 
          return new SuccessResult(UserMessages.userUpdateSuccess);
 
+    }
+
+    @Override
+    public DataResult<User> getLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.getPrincipal()=="anonymousUser"){
+            return new ErrorDataResult<>(UserMessages.userNotLoggedIn);
+        }
+
+        var userMail = authentication.getName();
+        return getUserByEmail(userMail);
     }
 
     //using email instead of username

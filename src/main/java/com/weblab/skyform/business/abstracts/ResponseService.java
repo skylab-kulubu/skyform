@@ -12,6 +12,8 @@ public interface ResponseService {
 
     Result addResponse(CreateResponseDto createResponseDto);
 
+    Result addResponses(List<CreateResponseDto> createResponseDtos, int formId);
+
     DataResult<List<Response>> getAllResponses();
 
     DataResult<List<GetResponseDto>> getAllResponsesDto();
@@ -19,5 +21,7 @@ public interface ResponseService {
     DataResult<Response> getResponseById(int id);
 
     DataResult<GetResponseDto> getResponseDtoById(int id);
+
+    DataResult<List<GetResponseDto>> getResponsesByResponseSession(String responseSession);
 
 }

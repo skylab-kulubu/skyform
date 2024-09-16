@@ -11,7 +11,6 @@ import com.weblab.skyform.core.utilities.results.SuccessDataResult;
 import com.weblab.skyform.entities.dtos.user.CreateUserDto;
 import com.weblab.skyform.entities.dtos.user.LoginUserDto;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,14 +19,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthManager implements AuthService {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtService jwtService;
+    private final JwtService jwtService;
+
+    public AuthManager(AuthenticationManager authenticationManager, UserService userService, JwtService jwtService) {
+        this.authenticationManager = authenticationManager;
+        this.userService = userService;
+        this.jwtService = jwtService;
+    }
+
+
 
     @Override
     public Result register(CreateUserDto createUserDto) {

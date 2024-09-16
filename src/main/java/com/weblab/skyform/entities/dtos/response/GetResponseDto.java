@@ -26,11 +26,14 @@ public class GetResponseDto {
 
     private String responseType;
 
+    private String responseSession;
+
     public GetResponseDto(Response response){
         this.id = response.getId();
-        this.responder = new GetUserDto(response.getResponder());
+        this.responder = response.getResponder() == null ? null : new GetUserDto(response.getResponder());
         this.question = new GetQuestionDto(response.getQuestion());
         this.responseType = response.getResponseType().getValue();
+        this.responseSession = response.getResponseSession();
     }
 
     public List<GetResponseDto> buildListGetResponseDto(List<Response> responses){

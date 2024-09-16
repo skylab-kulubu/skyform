@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface QuestionService {
 
-    Result addQuestion(CreateQuestionDto createQuestionDto);
+    Result addQuestion(CreateQuestionDto createQuestionDto, int formId);
 
     DataResult<Question> getQuestionById(int id);
 
@@ -20,6 +20,10 @@ public interface QuestionService {
     DataResult<List<Question>> getAllQuestions();
 
     DataResult<List<GetQuestionDto>> getAllQuestionsDto();
+
+    Result addQuestions(List<CreateQuestionDto> createQuestionDtos, int formId);
+
+    DataResult<List<Question>> getQuestionsByFormId(int formId);
 
 
 }

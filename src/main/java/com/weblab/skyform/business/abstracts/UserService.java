@@ -27,5 +27,7 @@ public interface UserService extends UserDetailsService {
 
     Result updateUser(User user);
 
+    DataResult<User> getLoggedInUser();
+
 
 }
