@@ -20,6 +20,8 @@ public class GetResponseDto {
 
     private int id;
 
+    private int formId;
+
     private GetUserDto responder;
 
     private GetQuestionDto question;
@@ -32,6 +34,7 @@ public class GetResponseDto {
         this.id = response.getId();
         this.responder = response.getResponder() == null ? null : new GetUserDto(response.getResponder());
         this.question = new GetQuestionDto(response.getQuestion());
+        this.formId = response.getQuestion().getForm().getId();
         this.responseType = response.getResponseType().getValue();
         this.responseSession = response.getResponseSession();
     }

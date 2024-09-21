@@ -12,4 +12,6 @@ public interface ResponseDao extends JpaRepository<Response, Integer> {
 
     Optional<List<Response>> findAllByResponseSession(String responseSession);
 
+    Optional<List<Response>> findAllByQuestion_FormId(int formId);
+
 }

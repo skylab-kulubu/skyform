@@ -76,6 +76,17 @@ public class ResponseController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/exportFormResponsesToExcelByFormId/{formId}")
+    public ResponseEntity<byte[]> exportFormResponsesToExcelByFormId(@PathVariable int formId){
+        var result = responseService.exportFormResponsesToExcelByFormId(formId);
+
+        if(!result.isSuccess()){
+            return ResponseEntity.badRequest().body(result.getData());
+        }
+
+        return ResponseEntity.ok(result.getData());
+    }
+
 
 
 }

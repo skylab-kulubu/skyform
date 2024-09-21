@@ -5,10 +5,12 @@ import com.weblab.skyform.business.abstracts.QuestionService;
 import com.weblab.skyform.business.abstracts.ResponseService;
 import com.weblab.skyform.business.abstracts.UserService;
 import com.weblab.skyform.business.constants.ResponseMessages;
+import com.weblab.skyform.core.utilities.excel.ExcelFileHelper;
 import com.weblab.skyform.core.utilities.results.*;
 import com.weblab.skyform.dataAccess.abstracts.ResponseDao;
 import com.weblab.skyform.entities.*;
 import com.weblab.skyform.entities.dtos.response.*;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -26,11 +28,17 @@ public class ResponseManager implements ResponseService {
 
     private final QuestionService questionService;
 
+    private final FormService formService;
 
-    public ResponseManager(QuestionService questionService, ResponseDao responseDao, UserService userService) {
+    private final ExcelFileHelper excelFileHelper;
+
+
+    public ResponseManager(QuestionService questionService, ResponseDao responseDao, UserService userService, FormService formService,@Lazy ExcelFileHelper excelFileHelper) {
         this.questionService = questionService;
         this.responseDao = responseDao;
         this.userService = userService;
+        this.formService = formService;
+        this.excelFileHelper = excelFileHelper;
     }
 
     @Override
@@ -234,5 +242,33 @@ public class ResponseManager implements ResponseService {
         List<GetResponseDto> listGetResponseDto = new GetResponseDto().buildListGetResponseDto(responses.get());
 
         return new SuccessDataResult<>(listGetResponseDto, ResponseMessages.responsesSuccessfullyBrought);
+    }
+
+    @Override
+    public DataResult<List<Response>> getResponsesByFormId(int formId) {
+        var responses = responseDao.findAllByQuestion_FormId(formId);
+
+        if (responses.isEmpty()) {
+            return new ErrorDataResult<>(ResponseMessages.responsesNotFound);
+        }
+
+        return new SuccessDataResult<>(responses.get(), ResponseMessages.responsesSuccessfullyBrought);
+    }
+
+    @Override
+    public DataResult<byte[]> exportFormResponsesToExcelByFormId(int formId) {
+        var formResult = formService.getFormById(formId);
+        if (!formResult.isSuccess()) {
+            return new ErrorDataResult<>(null, formResult.getMessage());
+        }
+        var form = formResult.getData();
+
+
+        var excelFileResponse = excelFileHelper.exportFormResponsesToExcel(form.getId());
+        if (!excelFileResponse.isSuccess()){
+            return new ErrorDataResult<>(null, excelFileResponse.getMessage());
+        }
+
+        return new SuccessDataResult<byte[]>(excelFileResponse.getData(), "Form responses exported to excel file successfully.");
     }
 }

@@ -16,6 +16,7 @@ public class GetResponseTextDto extends GetResponseDto{
 
     public GetResponseTextDto(ResponseText responseText){
         super(responseText.getId(),
+                    responseText.getQuestion().getForm().getId(),
                         responseText.getResponder() == null ? null : new GetUserDto(responseText.getResponder()),
                      new GetQuestionDto(responseText.getQuestion()),
                      responseText.getResponseType().getValue(),

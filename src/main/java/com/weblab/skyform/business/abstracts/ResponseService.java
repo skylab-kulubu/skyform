@@ -24,4 +24,8 @@ public interface ResponseService {
 
     DataResult<List<GetResponseDto>> getResponsesByResponseSession(String responseSession);
 
+    DataResult<List<Response>> getResponsesByFormId(int formId);
+
+    DataResult<byte[]> exportFormResponsesToExcelByFormId(int formId);
+
 }
